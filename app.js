@@ -2,6 +2,7 @@ import express from "express";
 import ejs from "ejs";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import encrypt from "mongoose-encryption";
 
 const app = express();
 app.use(express.static("public"));
@@ -13,10 +14,14 @@ mongoose.connect("mongodb://localhost:27017/practiceDB", {
   useUnifiedTopology: true,
 });
 
-const userSchema = {
+const userSchema = new mongoose.Schema({
   email: String,
   password: String,
-};
+});
+
+const secret = "Thisisourlittlesectet.";
+
+userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
 
 const User = new mongoose.model("User", userSchema);
 
