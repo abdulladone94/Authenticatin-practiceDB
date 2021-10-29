@@ -10,6 +10,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "gitignore": "^0.7.0",
     "mongoose": "^5.13.12",
     "mongoose-encryption": "^2.1.1",
     "mongoose-findorcreate": "^3.0.0",
