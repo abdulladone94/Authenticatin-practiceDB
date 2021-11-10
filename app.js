@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   googleId: String,
+  secret: String,
 });
 
 // userSchema.plugin(encrypt, {
@@ -122,6 +123,33 @@ app.get("/secrets", (req, res) => {
 app.get("/logout", (req, res) => {
   req.logout();
   res.redirect("/");
+});
+
+app.get("/submit", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render("submit");
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/submit", (req, res) => {
+  const submittedSecret = req.body.secret;
+  User.findById(
+    (req.body.id,
+    (err, foundUser) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if (foundUser) {
+          foundUser.secret = submittedSecret;
+          foundUser.save((req, res) => {
+            res.redirect("/secrets");
+          });
+        }
+      }
+    })
+  );
 });
 
 app.post("/register", (req, res) => {
