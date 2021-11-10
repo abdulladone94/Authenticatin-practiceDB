@@ -135,21 +135,18 @@ app.get("/submit", (req, res) => {
 
 app.post("/submit", (req, res) => {
   const submittedSecret = req.body.secret;
-  User.findById(
-    (req.body.id,
-    (err, foundUser) => {
-      if (err) {
-        console.log(err);
-      } else {
-        if (foundUser) {
-          foundUser.secret = submittedSecret;
-          foundUser.save((req, res) => {
-            res.redirect("/secrets");
-          });
-        }
+  User.findById(req.user.id, (err, foundUser) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUser) {
+        foundUser.secret = submittedSecret;
+        foundUser.save(() => {
+          res.redirect("/secrets");
+        });
       }
-    })
-  );
+    }
+  });
 });
 
 app.post("/register", (req, res) => {
