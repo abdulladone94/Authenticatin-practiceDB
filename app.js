@@ -112,9 +112,9 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
-app.get("/secrets", (req, res) => {
+app.get("/submit", (req, res) => {
   if (req.isAuthenticated()) {
-    res.render("secrets");
+    res.render("submit");
   } else {
     res.redirect("/login");
   }
@@ -125,12 +125,21 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-app.get("/submit", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.render("submit");
-  } else {
-    res.redirect("/login");
-  }
+app.get("/secrets", (req, res) => {
+  // if (req.isAuthenticated()) {
+  //   res.render("submit");
+  // } else {
+  //   res.redirect("/login");
+  // }
+  User.find({ secret: { $ne: null } }, (err, foundUsers) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUsers) {
+        res.render("secrets", { usersWithSecrets: foundUsers });
+      }
+    }
+  });
 });
 
 app.post("/submit", (req, res) => {
